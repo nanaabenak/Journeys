@@ -7,6 +7,7 @@ public class GameState : MonoBehaviour
     public int storyProgress;
     public int decisionMade;
     public int currentStory;
+    public bool miniGameResult;
 
 
     void Awake()
