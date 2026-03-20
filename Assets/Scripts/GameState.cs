@@ -6,6 +6,7 @@ public class GameState : MonoBehaviour
     public string currentCountry;
     public int storyProgress;
     public int decisionMade;
+    public int currentStory;
 
 
     void Awake()

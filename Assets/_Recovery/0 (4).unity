@@ -476,8 +476,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 277.6084, y: -177.70032}
-  m_SizeDelta: {x: 244.7832, y: 94.5994}
+  m_AnchoredPosition: {x: -227.5, y: 0.000030518}
+  m_SizeDelta: {x: 455, y: 1006.853}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1323954724
 GameObject:
@@ -827,10 +827,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 197902278}
-    - target: {fileID: 5665645599383842700, guid: 5785c68c4b545a9ae9c7ffc410af898b, type: 3}
-      propertyPath: m_UiScaleMode
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7527022140538284367, guid: 5785c68c4b545a9ae9c7ffc410af898b, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -920,10 +916,10 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 8642021288428948372, guid: 5785c68c4b545a9ae9c7ffc410af898b, type: 3}
       insertIndex: 0
-      addedObject: {fileID: 1323954725}
+      addedObject: {fileID: 1152120047}
     - targetCorrespondingSourceObject: {fileID: 8642021288428948372, guid: 5785c68c4b545a9ae9c7ffc410af898b, type: 3}
       insertIndex: 1
-      addedObject: {fileID: 1152120047}
+      addedObject: {fileID: 1323954725}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5785c68c4b545a9ae9c7ffc410af898b, type: 3}
 --- !u!1660057539 &9223372036854775807

@@ -21,11 +21,11 @@ EditorBuildSettings:
     path: Assets/Scenes/CountryContext.unity
     guid: ed176a36dc5b6d03e934f7b837716e9a
   - enabled: 1
-    path: Assets/Scenes/MiniGame.unity
-    guid: 79afd50f8e7ae593e9bf5ae9102e64ae
-  - enabled: 1
     path: Assets/Scenes/Decision.unity
     guid: 3c83ec2c55b4dfad9ab3caa283ada396
+  - enabled: 1
+    path: Assets/Scenes/MiniGame.unity
+    guid: 79afd50f8e7ae593e9bf5ae9102e64ae
   - enabled: 1
     path: Assets/Scenes/Outcome.unity
     guid: 8dfbc1a2d1edd90dc8c87baef9488449

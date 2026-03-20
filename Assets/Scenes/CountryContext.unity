@@ -428,7 +428,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: MiniGame
+          m_StringArgument: Decision
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1538713208
@@ -486,8 +486,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1052.5, y: -630}
-  m_SizeDelta: {x: 455, y: 180}
+  m_AnchoredPosition: {x: 272.27853, y: -167.00328}
+  m_SizeDelta: {x: 255.4381, y: 115.9896}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1794736967
 GameObject:
