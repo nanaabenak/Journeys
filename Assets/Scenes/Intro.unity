@@ -254,9 +254,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::IntroManager
   fadePanel: {fileID: 1396254168}
   images:
-  - {fileID: 3100286479994796668, guid: c1575b69828b4f99983b8992177bffe1, type: 3}
-  - {fileID: -7181398913988574769, guid: 9dab5cf44657b2b45985ed47f9eb80c2, type: 3}
-  - {fileID: 2005658278417756907, guid: 277cbdb7821a06ee4af1d30d3a33d1e1, type: 3}
+  - {fileID: 2992944650803712291, guid: 3924338c16a7995459c8eb8f98fe02e1, type: 3}
+  - {fileID: 6729075554750347451, guid: b65a1725094f0e1479ba7bc819a30425, type: 3}
+  - {fileID: 3274426285960660601, guid: bf019e50518feec48abe2e0987f9d2ec, type: 3}
   - {fileID: -5330608266556826973, guid: e80e9226db975121fbe3437b1281fcf2, type: 3}
   Background: {fileID: 1664771732}
 --- !u!4 &1297753160
@@ -347,7 +347,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -1187671220275584561, guid: ba79a40e566b7d06f8431ef09ce3eda2, type: 3}
+  m_Sprite: {fileID: 8295851873760062903, guid: 1fa8de3da15c88745ac35b174d659233, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

@@ -1,0 +1,102 @@
+{
+  "story_id": "ghana_story_1",                    
+  "country": "Ghana",                              
+  "sdg": ["SDG 4"],                                
+  "mini_game": "oware",                            
+  "delegate": {
+    "name": "Kofi",                                
+    "title": "The Owl Teacher",                    
+    "sprite": "kofi_neutral"                       
+  },
+  "dialogue": [                                    
+    {
+      "speaker": "Narrator",                       
+      "text": "Ghana is celebrated across Africa for one number above all others. Eighty-seven percent. That is the share of children enrolled in primary school — one of the highest rates on the continent.",                               
+      "sprite": "kofi_concerned"                   
+    },
+    {
+      "speaker": "Narrator",                       
+      "text": "But walk into a classroom and look more carefully. A room built for thirty holds sixty-two. Four textbooks. A blackboard full of writing that half the children cannot read.",                               
+      "sprite": "kofi_concerned"                   
+    },
+    {
+      "speaker": "Kofi",                       
+      "text": "I have been teaching for twenty years. I love every child in this room. And I am failing them. Not because I don't care — because the system built around them was never designed to teach. It was designed to count.",                               
+      "sprite": "kofi_concerned"                   
+    },
+    {
+      "speaker": "Narrator",                       
+      "text": "In the front row sits a boy named Kwame. He cannot read a single sentence. He has been in school for five years. Last week the generator broke. Kwame fixed it — using parts from two broken fans and a piece of wire. He is ten years old.",                               
+      "sprite": "kofi_concerned"                   
+    },
+    {
+      "speaker": "Kofi",                       
+      "text": "Over forty percent of children leave primary school without basic literacy or numeracy. The government's Free Senior High School policy is celebrated everywhere. What nobody says loudly — it pulled funding away from basic education to pay for it. We are polishing the roof while the foundation cracks.",                               
+      "sprite": "kofi_concerned"                   
+    },
+    {
+      "speaker": "Narrator",                       
+      "text": "The district education committee is meeting today. Two proposals are on the table. Kofi has been invited to speak. The decision affects every Kwame in every classroom in this district.",                               
+      "sprite": "kofi_concerned"                   
+    },
+    {
+      "speaker": "Kofi",                       
+      "text": "I am asking you — not as a teacher, not as a statistic — as someone who has watched brilliant children be marked as failures for twenty years. Choose carefully.",                               
+      "sprite": "kofi_concerned"                   
+    }
+  ],
+  "decision": {                                    
+    "title": "The Empty Page",                                
+    "question": "...",                             
+    "option_a": {
+      "label": "The Expansion",                              
+      "description": "Build 200 new schools across the district. Show progress through infrastructure. Enrollment numbers will rise. International partners will take notice.",                        
+      "preamble": "More schools means more children reached. Infrastructure is the foundation of everything that follows. This is how change begins"                            
+    },
+    "option_b": {
+      "label": "The Foundation Fix",
+      "description": "Freeze all new construction. Redirect funding into existing schools — reduce class sizes, train and pay teachers properly, introduce structured literacy assessments.",
+      "preamble": "Freezing construction feels like going backwards. Communities are waiting for those buildings. Can you really ask them to wait longer?"
+    }
+  },
+  "outcomes": {                                    
+    "a": {                                         
+      "tier_1": "The new schools stand empty. Construction ran over budget. Three buildings were never finished. Enrollment ticked up by four percent. Reading rates did not move. Kofi receives a government memo congratulating the district on its new infrastructure. He folds it carefully and puts it in a drawer. Kwame dropped out last month to help his family farm.",                             
+      "tier_2": "Half the new schools are completed and open. Enrollment climbs. The minister gives a speech. A World Bank team visits and takes photographs of the new buildings. Three years later a quiet assessment finds learning poverty unchanged above forty percent. The buildings are full. The teaching is the same. Kwame is enrolled in one of the new schools. He still cannot read.",
+      "tier_3": "The schools are built. Enrollment is at ninety-one percent — a record. International headlines celebrate Ghana's education surge. Inside the classrooms, class sizes are still sixty. Textbooks are still four per room. One young teacher in a new building starts a reading circle on her own initiative. Fifteen children improve. It is not policy. It is one person refusing to accept the system. Kwame is one of the fifteen.",
+      "tier_4": "Enrollment hits ninety-three percent — the highest in West Africa. The government wins an international education award. Kofi attends the ceremony. He sits in the back. On the walk home he passes a classroom where sixty-four children share three textbooks. A boy in the front row is staring at a word he cannot read. He has been staring at it for twenty minutes. He reminds Kofi of someone. The numbers were real. The learning was not."                              
+    },
+    "b": {                                         
+      "tier_1": "The reform passes but funding arrives late and incomplete. Class sizes drop slightly in two districts. Teachers attend one training day. Some read assessments are introduced but enforcement is inconsistent. Progress is real but fragile — like something planted in dry soil. Kofi gets eighteen textbooks. He needed forty. Kwame learns to read his own name by end of term. Kofi writes it on the board and asks him to read it aloud. He does. The class claps.",
+      "tier_2": "Class sizes in pilot districts fall to forty. Teachers receive structured training and show up motivated. Literacy assessments are introduced. Reading rates in pilot areas improve by eighteen percent in the first year. Kwame is referred to a technical aptitude support programme. He is the first child from his school to be identified through the new assessment system. He builds a small water pump from scrap metal for a class project. His teacher films it.",
+      "tier_3": "The reform takes hold across most of the district. Class sizes fall to thirty-five. Textbooks arrive. Teachers trained. Reading rates improve thirty-one percent across pilot schools. The policy is not celebrated in international headlines. It is celebrated in classrooms — quietly, one child at a time. Kwame reads his first full book. It takes him three weeks. He reads it twice. Kofi buys him a second one with his own money.",
+      "tier_4": "The reform spreads district-wide. Class sizes average thirty-two. Every school has textbooks. Teacher attendance is tracked and rewarded. Reading rates jump thirty-eight percent in one academic year — matching the best results from structured pedagogy studies on the continent. Kwame is referred to an engineering talent programme. At eleven years old he builds a working model of a water filtration system for the district science fair. He wins. Kofi is there. He doesn't say anything. He just nods. That is enough."
+    }
+  },
+  "negotiation": {
+  "stakeholders": [
+    { "name": "Minister Asante", "sprite": "minister_neutral" }
+  ],
+  "milestones": [
+    {
+      "trigger": "first_capture",
+      "speaker": "Kofi",
+      "text": "...",
+      "response_speaker": "Minister Asante",
+      "response_text": "..."
+    }
+  ],
+  "momentum": {
+    "losing": {
+      "lines": [
+        { "speaker": "Kofi", "text": "...", "response_speaker": "Minister Asante", "response_text": "..." },
+        { "speaker": "Kofi", "text": "...", "response_speaker": "Minister Asante", "response_text": "..." },
+        { "speaker": "Kofi", "text": "...", "response_speaker": "Minister Asante", "response_text": "..." },
+        { "speaker": "Kofi", "text": "...", "response_speaker": "Minister Asante", "response_text": "..." }
+      ]
+    },
+    "even": { "lines": [ "..." ] },
+    "winning": { "lines": [ "..." ] }
+  }
+}
+}

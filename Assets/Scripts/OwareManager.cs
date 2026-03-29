@@ -18,15 +18,17 @@ public class OwareManager : SceneBase
     public TMP_Text turnIndicator;
     private bool isPlayerTurn = true;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
+    private bool gameOver = false;
+    // private bool captureHappened = false;
+
+    
     void Start()
     {
+        // ai = new OwareAI();
         for (int i = 0; i < 6; i++)
         {
             playerPits[i] = 4;
             aiPits[i] = 4;
-        }
-        for (int i = 0; i < 6; i++)
-        {
             int index = i;
             playerPitButtons[i].onClick.AddListener(() => OnPitClicked(index));
         }
@@ -44,254 +46,296 @@ public class OwareManager : SceneBase
         for (int i = 0; i < 6; i++)
         {
             playerPitButtons[i].GetComponentInChildren<TMP_Text>().text = playerPits[i].ToString();
-            playerPitButtons[i].interactable = isPlayerTurn && playerPits[i] > 0;       
-        }
-
-        for (int i = 0; i < 6; i++)
-        {
+            playerPitButtons[i].interactable = isPlayerTurn && playerPits[i] > 0 && !gameOver; // Only interactable if it's player's turn, pit has seeds, and game is not over
             aiPitButtons[i].GetComponentInChildren<TMP_Text>().text = aiPits[i].ToString();
             aiPitButtons[i].interactable = false; // AI pits are not interactable
         }
     }
 
-    public void OnPitClicked(int pitIndex)
+    int GetPitCount(int pos)
     {
-        int seeds = playerPits[pitIndex]; // pick up seeds
-        playerPits[pitIndex] = 0; // empty the pit
-        int currentPos = pitIndex;
-        
+        return pos < 6 ? playerPits[pos] : aiPits[pos - 6];
+    }
 
-        while (seeds > 0)
-        {   
-            bool stopSowing = false;
-            // sow seeds
-            for (int i = 1; i <= seeds; i++)
+    void SetPitCount(int pos, int count)
+    {
+        if (pos < 6)
+        {
+            playerPits[pos] = count;
+        }
+        else
+        {
+            aiPits[pos - 6] = count; // maybe return the pits will see later
+        }
+    }
+
+    int IncrementPit(int pos)
+    {
+        if (pos < 6)
+        {
+            playerPits[pos]++;
+            return playerPits[pos];
+        }
+        else
+        {
+            aiPits[pos - 6]++;
+            return aiPits[pos - 6];
+        }
+    }
+
+    int EmptyPit(int pos)
+    {
+        int count = GetPitCount(pos);
+        SetPitCount(pos, 0);
+        return count;
+    }
+
+    bool IsPlayerSide(int pos)
+    {
+        return pos < 6;
+    }
+
+// mid-sow capture
+    bool OwnerCaptures(int pos)
+    {
+        if (GetPitCount(pos) != 4) return false;
+
+        if (IsPlayerSide(pos))
+        {
+            playerCapturedSeeds += 4;
+        }
+        else
+        {
+            aiCapturedSeeds += 4;
+        }
+        SetPitCount(pos, 0);
+        return true;
+    }
+
+// last seed capture
+
+    bool ActivePlayerCapture(int pos, bool isPlayerTurn)
+    {
+        if (GetPitCount(pos) != 4) return false;
+        if (isPlayerTurn)
+        {
+            playerCapturedSeeds +=4;
+        }
+        else
+        {
+            aiCapturedSeeds += 4;
+        }
+        SetPitCount(pos, 0);
+        return true;
+    }
+
+    bool IsSideEmpty(bool playerSide)
+    {
+        for (int i = 0; i < 6 ; i++)
+        {
+            if(playerSide)
+            {
+                if(playerPits[i] > 0) return false;
+            }
+            else
+            {
+                if(aiPits[i] > 0) return false;
+            }
+        }
+        return true;
+    }
+
+    int TotalSeedsOnBoard()
+    {
+        int total = 0;
+
+        for (int i = 0; i < 6; i++)
+        {
+            total += playerPits[i];
+            total += aiPits[i];
+        }
+
+        return total;
+    }
+
+    int GetRandomValidPit(bool playerSide)
+    {
+        int index;
+
+        do
+        {
+            index = Random.Range(0,6);
+        }
+        while ((playerSide ? playerPits[index] : aiPits[index]) == 0);
+        // while(pit[index] == 0);
+
+        return index;
+    }
+
+    void SowSeeds (int startPos, int seeds, bool isPlayerTurn)
+    {
+        int safety = 0;
+        int currentPos = startPos;
+        while (true)
+        {
+            safety++;
+            if (safety > 100) 
+            {
+                Debug.LogWarning("Safety Trigered infinite loop occurs somewhwer");
+                break;
+            };
+            bool captureHappened = false;
+            for (int i =1; i <= seeds; i++)
             {
                 int pos = (currentPos + i) % 12;
-                if (pos < 6)
+                int previousCount = GetPitCount(pos);
+                int newCount = IncrementPit(pos);
+
+                if (previousCount==3 && newCount == 4)
+            {
+                bool isLast = (i  == seeds);
+                bool isOpponent = IsPlayerSide(pos) != isPlayerTurn;
+
+                if (isLast && isOpponent)
+                { 
+                    ActivePlayerCapture(pos, isPlayerTurn);
+                    captureHappened = true;
+                }
+                else if (isLast && !isOpponent)
                 {
-                    playerPits[pos]++;
-                    if (playerPits[pos] == 4 )
-                    {
-                    playerCapturedSeeds += playerPits[pos];
-                    playerPits[pos] = 0; // capture seeds and empty the pit
-
-
-                    }
-                }     
+                    OwnerCaptures(pos);
+                    captureHappened = true;
+                }
                 else
                 {
-                    aiPits[pos - 6]++;
-                    if (aiPits[pos - 6] == 4)
-                    {
-                        if (i == seeds) // last seed — player captures
-                        {
-                            playerCapturedSeeds += 4;
-                            stopSowing = true;
-                            break; // stop sowing
-                        }
-                        else // mid sow — AI captures
-                        {
-                            aiCapturedSeeds += 4;
-                            aiPits[pos - 6] = 0;
-                        }
-                        
-                    }
+                    OwnerCaptures(pos);
                 }
-            }
 
-            if (stopSowing)
-            {
-                break; // stop sowing if player captured on last seed
+                
             }
-
-            // check last position
-            int lastPos = (currentPos + seeds) % 12;
-            
-            bool lastPitEmpty = lastPos < 6 ? playerPits[lastPos] == 0 : aiPits[lastPos - 6] == 0;
-            if (lastPitEmpty)
-            {
-                break; // stop sowing
-            }
-            else
-            {
-                // pick up seeds from last pit and keep going
-                seeds = lastPos < 6 ? playerPits[lastPos] : aiPits[lastPos - 6];
-                currentPos = lastPos;
-                // empty that pit
-                if (lastPos < 6)
-                {
-                    playerPits[lastPos] = 0; // empty the pit
-                }
-                else                {
-                    aiPits[lastPos - 6] = 0; // empty the pit
-                }
-            }
-
-           
         }
-        
 
-       
+        int lastPos = (currentPos + seeds) % 12;
 
-        // update UI and switch turn
+        if (GetPitCount(lastPos) == 1 || captureHappened)
+        {
+            break;
+        }
+        seeds = EmptyPit(lastPos);
+        currentPos = lastPos;
+        }
+    }
+
+    public void OnPitClicked(int pitIndex)
+    {
+        if (gameOver || !isPlayerTurn) return;
+        if (playerPits[pitIndex] == 0) return;
+
+        Debug.Log("Player chooses pit: " + pitIndex);
+
+
+        int startPos = pitIndex;
+        int seeds = EmptyPit(startPos);
+
+        SowSeeds(startPos, seeds, true);
+
         UpdateUI();
-
         CheckGameOver();
 
+        if (gameOver) return;
 
-        // if row is empty after player move, check if game over or skip AI turn
-        if (System.Array.TrueForAll(playerPits, p => p == 0))
+        if (IsSideEmpty(true))
         {
-            int totalLeft = 48 - (playerCapturedSeeds + aiCapturedSeeds);
-            if (totalLeft == 4)
-            {
-                CheckGameOver();
-                return;
-            }
-            else
-            {
-                // skip player turn, AI keeps going
-                StartCoroutine(AITurn());
-                return;
-            }
+            StartCoroutine(AITurn());
+            return;
         }
 
         isPlayerTurn = false;
         StartCoroutine(AITurn());
-
     }
 
     IEnumerator AITurn()
     {
-        yield return new WaitForSeconds(2f); // Wait for player to see board update
+        if (gameOver) yield break;
+        yield return new WaitForSeconds(1f);
 
-        // If all AI pits are empty, check if game should end or skip turn
-        if (System.Array.TrueForAll(aiPits, p => p == 0))
+        if (IsSideEmpty(false))
         {
-            int totalLeft = 48 - (playerCapturedSeeds + aiCapturedSeeds);
-            if (totalLeft == 4)
+            if (TotalSeedsOnBoard() == 4)
             {
                 CheckGameOver();
-                yield break;
             }
             else
             {
-                isPlayerTurn = true; // skip AI turn, player keeps going
+                isPlayerTurn = true;
                 UpdateUI();
-                yield break;
             }
+            yield break;
         }
 
-        // Simple AI: pick random non-empty pit
-        int aiPitIndex;
-        do
-        {
-            aiPitIndex = Random.Range(0, 6);
-        } while (aiPits[aiPitIndex] == 0);
-
-        int seeds = aiPits[aiPitIndex]; // pick up seeds from chosen pit
-        aiPits[aiPitIndex] = 0; // empty the chosen pit
-        int currentPos = aiPitIndex;
-
-        // Relay sowing loop — keeps going until last seed lands in empty pit
-        while (seeds > 0)
-        {
-            bool stopSowing = false;
-
-            // Sow seeds one by one around the board
-            for (int i = 1; i <= seeds; i++)
-            {
-                int pos = (currentPos + i) % 12;
-
-                if (pos < 6)
-                {
-                    // Landing on AI's side
-                    aiPits[pos]++;
-                    if (aiPits[pos] == 4)
-                    {
-                        aiCapturedSeeds += aiPits[pos]; // AI captures their own pit reaching 4
-                        aiPits[pos] = 0;
-                    }
-                }
-                else
-                {
-                    // Landing on player's side
-                    playerPits[pos - 6]++;
-                    if (playerPits[pos - 6] == 4)
-                    {
-                        if (i == seeds) // last seed — AI captures opponent's pit
-                        {
-                            aiCapturedSeeds += 4;
-                            stopSowing = true;
-                            break;
-                        }
-                        else // mid sow — player captures their own pit
-                        {
-                            playerCapturedSeeds += 4;
-                        }
-                        playerPits[pos - 6] = 0;
-                    }
-                }
-            }
-
-            // Stop if AI captured on last seed
-            if (stopSowing) break;
-
-            // Check where last seed landed
-            int lastPos = (currentPos + seeds) % 12;
-            bool lastPitEmpty = lastPos < 6 ? aiPits[lastPos] == 0 : playerPits[lastPos - 6] == 0;
-
-            if (lastPitEmpty)
-            {
-                break; // last seed landed in empty pit — end turn
-            }
-            else
-            {
-                // Relay — pick up seeds from last pit and keep sowing
-                seeds = lastPos < 6 ? aiPits[lastPos] : playerPits[lastPos - 6];
-                currentPos = lastPos;
-                if (lastPos < 6)
-                    aiPits[lastPos] = 0; // empty the relay pit
-                else
-                    playerPits[lastPos - 6] = 0; // empty the relay pit
-            }
-        }
-
-        // Update board and hand control back to player
+        int pitIndex = GetRandomValidPit(false);
+        // int pitIndex = ai.GetMove(playerPits,aiPits);
+        Debug.Log("AI chooses pit: " + pitIndex);
+        pitIndex += 6; // Adjust for AI pits
+        Debug.Log("AI chooses pit: " + pitIndex);
+        // int startPos = pitIndex + 6; 
+        int seeds = EmptyPit(pitIndex);
+        SowSeeds (pitIndex,seeds,false);
         UpdateUI();
         CheckGameOver();
+        
+        if (gameOver) yield break;
+
+        if (IsSideEmpty(false))
+        {
+            isPlayerTurn = true;
+            Debug.Log($"Player: {string.Join(",", playerPits)}");
+            Debug.Log($"AI: {string.Join(",", aiPits)}");
+            UpdateUI();
+            yield break;
+        }
+
         isPlayerTurn = true;
-        UpdateUI(); // refresh interactable state for player buttons
+        UpdateUI();
+        Debug.Log($"Player: {string.Join(",", playerPits)}");
+        Debug.Log($"AI: {string.Join(",", aiPits)}");
+        CheckGameOver();
+
+
     }
 
-    public void CheckGameOver()
+    void CheckGameOver()
     {
-        int totalSeedsLeft = 48 - (playerCapturedSeeds + aiCapturedSeeds);
-        if (totalSeedsLeft == 4)
+        if (TotalSeedsOnBoard() > 4) return;
+
+        gameOver = true;
+        playerCapturedSeeds += TotalSeedsOnBoard();
+
+        for (int i = 0; i < 6; i++)
         {
-            playerCapturedSeeds += 4; // Player captures remaining seeds
-            GameState.instance.miniGameResult = playerCapturedSeeds;
-            UpdateUI();
-            // Game over logic here (e.g., display winner)
-            if (playerCapturedSeeds > aiCapturedSeeds)
-            {
-                turnIndicator.text = "You Win!";
-            }
-            else if (aiCapturedSeeds > playerCapturedSeeds)
-            {
-                turnIndicator.text = "Forces of Evil Win!";
-            }
-            else
-            {
-                turnIndicator.text = "It's a Tie!";
-            }
-            StartCoroutine(LoadOutcomeAfterDelay());
+            playerPits[i] = 0;
+            aiPits[i] = 0;
+        }
 
-            
+        GameState.instance.miniGameResult = playerCapturedSeeds;
+        UpdateUI();
 
+        if (playerCapturedSeeds > aiCapturedSeeds)
+        {
+            turnIndicator.text = "You Win";
             
         }
+        else if (aiCapturedSeeds > playerCapturedSeeds)
+        {
+            turnIndicator.text = "Forces of Evil Win!";
+        }
+        else
+        {
+            turnIndicator.text = "It is a Tie!";
+
+        }
+            
+        StartCoroutine(LoadOutcomeAfterDelay());
     }
 
     IEnumerator LoadOutcomeAfterDelay()

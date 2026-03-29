@@ -1,0 +1,46 @@
+{
+  "story_id": "ghana_story_2",                    
+  "country": "Ghana",                              
+  "sdg": ["SDG 4"],                                
+  "mini_game": "dame",                            
+  "delegate": {
+    "name": "Ama",                                
+    "title": "The Elephant Researcher",                    
+    "sprite": "Elephant_in_Glasses"                       
+  },
+  "dialogue": [                                    
+    {
+      "speaker": "Narrator",                       
+      "text": "...",                               
+      "sprite": "ama_concerned"                   
+    }
+  ],
+  "decision": {                                    
+    "title": "...",                                
+    "question": "...",                             
+    "option_a": {
+      "label": "...",                              
+      "description": "...",                        
+      "preamble": "..."                            
+    },
+    "option_b": {
+      "label": "...",
+      "description": "...",
+      "preamble": "..."
+    }
+  },
+  "outcomes": {                                    
+    "a": {                                         
+      "tier_1": "...",                             
+      "tier_2": "...",
+      "tier_3": "...",
+      "tier_4": "..."                              
+    },
+    "b": {                                         
+      "tier_1": "...",
+      "tier_2": "...",
+      "tier_3": "...",
+      "tier_4": "..."
+    }
+  }
+}

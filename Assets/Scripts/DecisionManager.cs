@@ -5,92 +5,107 @@ using System.Collections;
 
 public class DecisionManager : SceneBase
 {
-    public TMP_Text StoryTitle; // reference to the story title text component  
-    public TMP_Text QuestionText; // reference to the question text component
-    public Image DelegatePlaceholder; // reference to the delegate placeholder image component
-    public Button CardA;    // reference to the card A button
-    public Button CardB;    // reference to the card B button
-    public TMP_Text PreambleText; // reference to the preamble text component
-    public Button ConfirmBtn;// reference to the confirm button
-    public Button CancelButton; // reference to the cancel button
-    public int decisionValue; // 0 for no decision, 1 for card A, 2 for card B
-    public string cardText; // text to display in the preamble based on the selected card
+    // ── UI References ─────────────────────────────────────
+    public TMP_Text StoryTitle;
+    public TMP_Text QuestionText;
+    public Image    DelegatePlaceholder;
+    public Button   CardA;
+    public Button   CardB;
+    public TMP_Text CardALabel;       // text on Card A button
+    public TMP_Text CardBLabel;       // text on Card B button
+    public TMP_Text PreambleText;
+    public Button   ConfirmBtn;
+    public Button   CancelButton;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    // ── State ─────────────────────────────────────────────
+    public int decisionValue = 0;
+    private string preambleA = "";
+    private string preambleB = "";
+
+    // ─────────────────────────────────────────────────────
     void Start()
     {
-        // Hiding preamble text ,confirm  and cancel button at the start of the scene
-        PreambleText.gameObject.SetActive(false); // hide the preamble text at the start
-        ConfirmBtn.gameObject.SetActive(false); // hide the confirm button at the start
-        CancelButton.gameObject.SetActive(false); // hide the cancel button at the start
+        // Fix color tinting
+        CardA.transition       = Selectable.Transition.None;
+        CardB.transition       = Selectable.Transition.None;
+        ConfirmBtn.transition  = Selectable.Transition.None;
+        CancelButton.transition = Selectable.Transition.None;
 
-        // Story Title and Question Text are set based on the current story progress in the GameState
-        if (GameState.instance.currentStory == 0)
-        {
-            StoryTitle.text = "The Educated";
-            QuestionText.text = "You find yourself at a crossroads. Do you take the left path or the right path?";
-        }
-        else if (GameState.instance.currentStory == 1)
-        {
-            StoryTitle.text = "End Galemsey";
-            QuestionText.text = "You are faced with a difficult decision. Do you choose option A or option B?";
-        }
-        else if (GameState.instance.currentStory == 2)
-        {
-            StoryTitle.text = "She Hurts For Nothing";
-            QuestionText.text = "You are faced with a difficult decision. Do you choose option A or option B?";
-        }
+        // Hide preamble UI
+        PreambleText.gameObject.SetActive(false);
+        ConfirmBtn.gameObject.SetActive(false);
+        CancelButton.gameObject.SetActive(false);
+
+        // Wire buttons
+        CardA.onClick.AddListener(OnCardAClick);
+        CardB.onClick.AddListener(OnCardBClick);
+        ConfirmBtn.onClick.AddListener(OnConfirmClick);
+        CancelButton.onClick.AddListener(OnCancelClick);
+
+        // Load content based on which story was picked
+        LoadStoryContent(GameState.instance.currentStory);
     }
 
-    void OnCardHoverEnter(Button card)
+    // ─────────────────────────────────────────────────────
+    void LoadStoryContent(int story)
     {
-        // Change the color of the card to indicate hover state
-        card.image.color = Color.yellow; // Change to a hover color (e.g., yellow)
+        if (story == 0) // Education
+        {
+            StoryTitle.text  = "The Empty Page";
+            QuestionText.text = "The district education committee is meeting. Two proposals are on the table.";
+            if (CardALabel) CardALabel.text = "The Expansion — Build 200 new schools";
+            if (CardBLabel) CardBLabel.text = "The Foundation Fix — Train teachers, reduce class sizes";
+            preambleA = "More schools means more children reached. Infrastructure is the foundation of everything that follows.";
+            preambleB = "Freezing construction feels like going backwards. Can you really ask communities to wait longer?";
+        }
+        else if (story == 1) // Galamsey
+        {
+            StoryTitle.text  = "The River Doesn't Lie";
+            QuestionText.text = "A coalition has been called. The river is orange. Two proposals are on the table.";
+            if (CardALabel) CardALabel.text = "The Crackdown — Deploy enforcement, seize equipment";
+            if (CardBLabel) CardBLabel.text = "The Alternative — Fund real livelihoods, training, legal licences";
+            preambleA = "Immediate enforcement sends a message. The river cannot wait for slow programmes to take effect.";
+            preambleB = "Alternative programmes take years. Is there really time while the river keeps running orange?";
+        }
     }
 
+    // ─────────────────────────────────────────────────────
     void OnCardSelected(Button card, string preamble)
     {
-        // Change the color of the card to indicate selection state
-        card.image.color = Color.green; // Change to a selected color (e.g., green)
-        Button otherCard = (card == CardA) ? CardB : CardA;
-        otherCard.image.color = Color.white;
-        PreambleText.text = preamble; // Set the preamble text based on the decision
-        PreambleText.gameObject.SetActive(true); // Show the preamble text
-        ConfirmBtn.gameObject.SetActive(true); // Show the confirm button
-        CancelButton.gameObject.SetActive(true); // Show the cancel button
-
+        card.image.color = Color.green;
+        Button other = (card == CardA) ? CardB : CardA;
+        other.image.color = Color.white;
+        PreambleText.text = preamble;
+        PreambleText.gameObject.SetActive(true);
+        ConfirmBtn.gameObject.SetActive(true);
+        CancelButton.gameObject.SetActive(true);
     }
 
     public void OnCardAClick()
     {
-        decisionValue = 1; // Set decision value to 1 for card A
-        cardText = "You have chosen option A. This decision will lead you down a path of knowledge and enlightenment, but it may also come with challenges and sacrifices. Are you sure you want to proceed with this choice?";
-        OnCardSelected(CardA, cardText); // Call the card selected method for card A
+        decisionValue = 1;
+        OnCardSelected(CardA, preambleA);
     }
 
     public void OnCardBClick()
     {
-        decisionValue = 2; // Set decision value to 2 for card B
-        cardText = "You have chosen option B. This decision will lead you down a path of comfort and security, but it may also limit your growth and potential. Are you sure you want to proceed with this choice?";
-        OnCardSelected(CardB, cardText); // Call the card selected method for card B
+        decisionValue = 2;
+        OnCardSelected(CardB, preambleB);
     }
 
     public void OnConfirmClick()
     {
-        GameState.instance.decisionMade = decisionValue; // Store the decision value in the GameState
-        // Load the minigame scene
-        
+        GameState.instance.decisionMade = decisionValue;
         StartCoroutine(LoadScene("MiniGame"));
     }
 
     public void OnCancelClick()
     {
-        
-        PreambleText.gameObject.SetActive(false); // Hide the preamble text
-        ConfirmBtn.gameObject.SetActive(false); // Hide the confirm button
-        CancelButton.gameObject.SetActive(false); // Hide the cancel button
-        decisionValue = 0; // Reset decision value to 0 for no decision
-        CardA.image.color = Color.white; // Reset card A color
-        CardB.image.color = Color.white; // Reset card B color
+        PreambleText.gameObject.SetActive(false);
+        ConfirmBtn.gameObject.SetActive(false);
+        CancelButton.gameObject.SetActive(false);
+        decisionValue = 0;
+        CardA.image.color = Color.white;
+        CardB.image.color = Color.white;
     }
 }
